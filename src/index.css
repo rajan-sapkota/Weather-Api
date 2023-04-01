@@ -31,6 +31,7 @@ body {
   min-height: 100vh;
 }
 
+
 div{
   background-image:url('/src/backgroundImage.jpeg');
   background-size:auto;
@@ -73,6 +74,13 @@ h2{
   
   width: 500px;
 }
+
+#type{
+  padding: 10px;
+  color: white;
+  margin: 10px;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

@@ -3,13 +3,17 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { useEffect } from 'react'
+import Typewriter from 'typewriter-effect/';
+
+
+
 function App() {
   const [place, setPlace] = useState("")
   const [feelslike, setfeelslike] = useState("")
   const [temp, setTemp] = useState("")
   const [sky, setSky] = useState("")
   const [time, setTime] = useState("")
-
+  
 
 
  
@@ -54,12 +58,24 @@ function App() {
 
   return (
       <>
+      <div>
+      <h1 id='type'><Typewriter
+  options={{
+    strings: ['Weather App'],
+    autoStart: true,
+    loop: true,
+  }}
+/>
+      </h1>
+      </div>
+
+
         <div className='mainBackground'>
           <h1></h1>
           <form onSubmit={submittedForSearch} >
           
 
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={changed}/>
+            <input className="form-control me-2" type="search" placeholder="Search City or Country" aria-label="Search" onChange={changed}/>
             <button className="btn btn-success" type="submit">Search</button>
           </form>
         </div>
