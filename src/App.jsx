@@ -11,6 +11,9 @@ function App() {
   const [temp, setTemp] = useState("");
   const [sky, setSky] = useState("");
   const [time, setTime] = useState("");
+  const [country, setCountry] = useState("");
+  const [rain, setRain] = useState("");
+
 
   useEffect(() => {
     console.log("Coords api calling...");
@@ -25,6 +28,10 @@ function App() {
         setSky(data.weather[0].description);
         setTemp(data.main.temp);
         setPlace(data.name);
+        setCountry(data.sys.country);
+        setRain(data.weather[0].main);
+        
+        
         var d = new Date();
 
         var utc = d.getTime() + d.getTimezoneOffset() * 60 * 1000;
@@ -55,6 +62,11 @@ function App() {
         setfeelslike(data.main.feels_like);
         setSky(data.weather[0].description);
         setTemp(data.main.temp);
+        setCountry(data.sys.country);
+        setRain(data.weather[0].main);
+
+       
+
 
         function calcTime(city, timezone) {
           var d = new Date();
@@ -83,9 +95,26 @@ function App() {
     setPlace(e.target.value);
   };
 
+  // const backgroundCondition=()=>{
+  //   const back = document.getElementById('mainBackground');
+    
+  //   if(rain==="Rain"){
+  //     console.log('first')
+  //   back.classList.add('snow')  
+  //   }
+  //   else if(rain=="snow"){
+
+  //   }
+  //   else{
+
+  //   }
+  // }
+  
   return (
     <>
-      <div>
+    
+
+      
         <h1 id='type'>
           <Typewriter
             options={{
@@ -95,10 +124,10 @@ function App() {
             }}
           />
         </h1>
-      </div>
+      
 
-      <div className='mainBackground'>
-        <h1></h1>
+      <div id='mainBackground'>
+        
         <form onSubmit={submittedForSearch}>
           <input
             className='form-control me-2'
@@ -111,38 +140,43 @@ function App() {
             Search
           </button>
         </form>
-      </div>
+      
       {temp && (
         <>
-          <div className='card text-center mb-3 text-warning'>
-            <div className='card-body'>
-              <h1 className='card-title text-danger'>{place.toUpperCase()}</h1>
+          <div className='text-center mb-3 text-primary'>
+              <h1 className='text-danger m-3'>{place.toUpperCase()+", "+ country}</h1>
 
-              <div className='card-body'>
-                <div className='card-text'>
+                  <div className='m-3'>
                   {" "}
                   <h2>{time}</h2>
                 </div>
-              </div>
+              
 
-              <div className='card-text'>
+              <div >
                 Feels Like:
                 <br /> <h2> {feelslike}</h2> <h1>&deg;C</h1>{" "}
               </div>
-            </div>
-            <div className='card-body'>
-              <div className='card-text'>
+            
+              <div>
                 Temperature:
                 <br /> <h2>{temp}</h2> <h1>&deg;C</h1>{" "}
               </div>
+            
+            <div >
+              <div> {rain+": "+ sky}</div>
             </div>
-            <div className='card-body'>
-              <div className='card-text'> {sky}</div>
             </div>
-          </div>
         </>
       )}
+<div className="footer" >
+&copy; 2023 RAJAN SAPKOTA <br/>
+rajan.sa9841@gmail.com | 
+<a href="rajan.sa9841@gmail.com"> Send an email</a>
+        </div>
+        </div>
+       
     </>
+    
   );
 }
 

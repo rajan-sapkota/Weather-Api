@@ -27,15 +27,31 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-
-div{
   background-image:url('/src/backgroundImage.jpeg');
-  background-size:auto;
+  background-size:cover;
+  max-width: 100vw;
+  min-width: 315px;
+  min-height: 100vh;
+  max-height: 100vh;
 }
+div{
+  background:#bbabab28;
+
+}
+/* 
+.rain{
+  background-image:url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA4NTk3OGE1NzE0YTgzN2I4ZmZjNGQ3Mjg4YjAzMDk2MjU4NDlmNCZjdD1z/Wmp1EOzVybWd13s5DB/giphy.gif');
+  background-size:cover;
+}
+.sun{
+  background-image: url('https://media1.giphy.com/media/h2C7YYwEAj02wGwmfy/giphy.gif?cid=6c09b952a6f28f50f6cb4ad580c121d080aa02e44855a06e&rid=giphy.gif&ct=s');
+  background-size:cover;
+}
+.snow{
+background-image: url('snow02.gif');
+background-size:cover;
+} */
+
 
 button {
   border-radius: 8px;
@@ -67,18 +83,20 @@ h2{
   width: 100%;
   color:red;
 }
-.box{
-  display: flex;
-  flex-wrap: wrap;
-  border: 1px solid red;
-  
-  width: 500px;
-}
 
 #type{
   padding: 10px;
   color: white;
   margin: 10px;
+}
+.footer{
+  height:50px;
+  position: absolute;
+  width: 100vw;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(240, 240, 217, 0.356);
+  background-image: none;
 }
 
 
