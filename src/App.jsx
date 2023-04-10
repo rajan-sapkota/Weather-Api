@@ -171,7 +171,7 @@ function App() {
 <div className="footer" >
 &copy; 2023 RAJAN SAPKOTA <br/>
 rajan.sa9841@gmail.com | 
-<a href="rajan.sa9841@gmail.com"> Send an email</a>
+<a href = "mailto: rajan.sa9841@gmail.com">Send Email</a>
         </div>
         </div>
        
