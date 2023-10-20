@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(221, 136, 136, 0.87);
   background-color: #142d3b;
 
   font-synthesis: none;
@@ -38,19 +38,7 @@ div{
   background:#bbabab28;
 
 }
-/* 
-.rain{
-  background-image:url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA4NTk3OGE1NzE0YTgzN2I4ZmZjNGQ3Mjg4YjAzMDk2MjU4NDlmNCZjdD1z/Wmp1EOzVybWd13s5DB/giphy.gif');
-  background-size:cover;
-}
-.sun{
-  background-image: url('https://media1.giphy.com/media/h2C7YYwEAj02wGwmfy/giphy.gif?cid=6c09b952a6f28f50f6cb4ad580c121d080aa02e44855a06e&rid=giphy.gif&ct=s');
-  background-size:cover;
-}
-.snow{
-background-image: url('snow02.gif');
-background-size:cover;
-} */
+
 
 
 button {
@@ -95,7 +83,7 @@ h2{
   width: 100vw;
   left: 0;
   bottom: 0;
-  background-color: rgba(240, 240, 217, 0.356);
+  background-color: rgba(157, 157, 16, 0.551);
   background-image: none;
 }
 

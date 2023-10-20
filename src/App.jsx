@@ -1,6 +1,5 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+
 import "./App.css";
 import { useEffect } from "react";
 import Typewriter from "typewriter-effect/";
@@ -35,7 +34,6 @@ function App() {
         var d = new Date();
 
         var utc = d.getTime() + d.getTimezoneOffset() * 60 * 1000;
-        //console.log((d.getTimezonetimezone()))
 
         var nd = new Date(utc + 1000 * data.timezone);
         console.log(nd);
@@ -70,10 +68,8 @@ function App() {
 
         function calcTime(city, timezone) {
           var d = new Date();
-          //console.log(d)
 
           var utc = d.getTime() + d.getTimezoneOffset() * 60 * 1000;
-          //console.log((d.getTimezonetimezone()))
 
           var nd = new Date(utc + 1000 * timezone);
 
@@ -95,20 +91,7 @@ function App() {
     setPlace(e.target.value);
   };
 
-  // const backgroundCondition=()=>{
-  //   const back = document.getElementById('mainBackground');
-    
-  //   if(rain==="Rain"){
-  //     console.log('first')
-  //   back.classList.add('snow')  
-  //   }
-  //   else if(rain=="snow"){
-
-  //   }
-  //   else{
-
-  //   }
-  // }
+  
   
   return (
     <>
