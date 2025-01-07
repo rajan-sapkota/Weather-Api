@@ -1,165 +1,183 @@
-import { useState } from "react";
-
-import "./App.css";
-import { useEffect } from "react";
-import Typewriter from "typewriter-effect/";
+import { useState, useEffect } from "react";
+import Typewriter from "typewriter-effect";
+import SearchForm from './components/SearchForm';
+import WeatherCard from './components/WeatherCard';
+import ForecastCard from './components/ForecastCard';
+import Footer from './components/Footer';
+import Design from "./components/Design";
 
 function App() {
-  const [place, setPlace] = useState("");
-  const [feelslike, setfeelslike] = useState("");
-  const [temp, setTemp] = useState("");
-  const [sky, setSky] = useState("");
-  const [time, setTime] = useState("");
-  const [country, setCountry] = useState("");
-  const [rain, setRain] = useState("");
+  const [locationData, setLocationData] = useState({
+    place: "",
+    feelslike: "",
+    temp: "",
+    sky: "",
+    time: "",
+    country: "",
+    rain: "",
+    icon: "",
+  });
+  const [forecast, setForecast] = useState([]);
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [error, setError] = useState("");
+  const [unitSystem, setUnitSystem] = useState("imperial"); // Fahrenheit
 
+  const loadWeatherData = async (lat, lon) => {
+    try {
+      const weatherRes = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=971dd5760ffab6b29ef2381c02412126&units=imperial&lang=en`
+      );
+      if (!weatherRes.ok) throw new Error("City not found");
+
+      const weatherData = await weatherRes.json();
+      const { main, weather, sys, timezone, name } = weatherData;
+
+      const currentTime = new Date(new Date().getTime() + timezone * 1000);
+      const formattedTime = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+      }).format(currentTime);
+
+      setLocationData({
+        feelslike: main.feels_like,
+        temp: main.temp,
+        sky: weather[0]?.description,
+        place: name,
+        country: sys.country,
+        rain: weather[0]?.main,
+        icon: weather[0]?.icon,
+        time: formattedTime,
+        temp_min: main.temp_min,
+        temp_max: main.temp_max,
+      });
+
+      const forecastRes = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=971dd5760ffab6b29ef2381c02412126&units=imperial&lang=en`
+      );
+      const forecastData = await forecastRes.json();
+      const dailyForecast = forecastData.list.filter(item =>
+        item.dt_txt.includes("12:00:00")
+      );
+
+      setForecast(dailyForecast);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    }
+  };
 
   useEffect(() => {
-    console.log("Coords api calling...");
-    if (!place) {
-      const loadFirst = async (lat, long) => {
-        const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=971dd5760ffab6b29ef2381c02412126&units=metric&lang=en`,
-        );
-        const data = await res.json();
-        console.log(data);
-        setfeelslike(data.main.feels_like);
-        setSky(data.weather[0].description);
-        setTemp(data.main.temp);
-        setPlace(data.name);
-        setCountry(data.sys.country);
-        setRain(data.weather[0].main);
-        
-        
-        var d = new Date();
-
-        var utc = d.getTime() + d.getTimezoneOffset() * 60 * 1000;
-
-        var nd = new Date(utc + 1000 * data.timezone);
-        console.log(nd);
-        setTime(nd.toLocaleString());
-      };
-      navigator.geolocation.getCurrentPosition(pos => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        loadFirst(lat, lon);
-      });
-    }
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      loadWeatherData(lat, lon);
+    });
   }, []);
 
-  const callApi = () => {
-    console.log("Place api calling");
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=971dd5760ffab6b29ef2381c02412126&units=metric&lang=en`,
-    )
-      .then(e => {
-        return e.json();
-      })
-      .then(async data => {
-        console.log(data);
-        setfeelslike(data.main.feels_like);
-        setSky(data.weather[0].description);
-        setTemp(data.main.temp);
-        setCountry(data.sys.country);
-        setRain(data.weather[0].main);
+  const callApi = async (place) => {
+    try {
+      setButtonClicked(true);
+      setError("");
 
-       
+      const weatherRes = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=971dd5760ffab6b29ef2381c02412126&units=imperial&lang=en`
+      );
+      if (!weatherRes.ok) throw new Error("City not found");
 
+      const weatherData = await weatherRes.json();
+      const { main, weather, sys, timezone, name } = weatherData;
 
-        function calcTime(city, timezone) {
-          var d = new Date();
+      const currentTime = new Date(new Date().getTime() + timezone * 1000);
+      const formattedTime = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+      }).format(currentTime);
 
-          var utc = d.getTime() + d.getTimezoneOffset() * 60 * 1000;
-
-          var nd = new Date(utc + 1000 * timezone);
-
-          setTime(nd.toLocaleString());
-          return (
-            "The local time for city " + city + " is " + nd.toLocaleString()
-          );
-        }
-        console.log(calcTime(place, data.timezone));
+      setLocationData({
+        feelslike: main.feels_like,
+        temp: main.temp,
+        sky: weather[0]?.description,
+        place: name,
+        country: sys.country,
+        rain: weather[0]?.main,
+        icon: weather[0]?.icon,
+        time: formattedTime,
+        temp_min: main.temp_min,
+        temp_max: main.temp_max,
       });
+
+      const forecastRes = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=971dd5760ffab6b29ef2381c02412126&units=imperial&lang=en`
+      );
+      const forecastData = await forecastRes.json();
+      const dailyForecast = forecastData.list.filter(item =>
+        item.dt_txt.includes("12:00:00")
+      );
+
+      setForecast(dailyForecast);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    }
   };
-  const submittedForSearch = e => {
+
+  const handleSearchSubmit = (e, place) => {
     e.preventDefault();
-    console.log("submitted");
-    return callApi();
+    callApi(place);
   };
 
-  const changed = e => {
-    setPlace(e.target.value);
-  };
-
-  
-  
   return (
-    <>
-    
-
-      
-        <h1 id='type'>
-          <Typewriter
-            options={{
-              strings: ["Weather App"],
-              autoStart: true,
-              loop: true,
-            }}
-          />
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-600 via-green-800 to-blue-900 text-white">
+      <Design />
+      <header className="text-center py-10">
+        <h1 className="text-5xl font-extrabold">
+          <Typewriter options={{ strings: ["Weather App"], autoStart: true, loop: true }} />
         </h1>
-      
+      </header>
 
-      <div id='mainBackground'>
-        
-        <form onSubmit={submittedForSearch}>
-          <input
-            className='form-control me-2'
-            type='search'
-            placeholder='Search City or Country'
-            aria-label='Search'
-            onChange={changed}
-          />
-          <button className='btn btn-success' type='submit'>
-            Search
-          </button>
-        </form>
-      
-      {temp && (
-        <>
-          <div className='text-center mb-3 text-primary'>
-              <h1 className='text-danger m-3'>{place.toUpperCase()+", "+ country}</h1>
+      <main className="container mx-auto px-4 flex-grow">
+        <SearchForm 
+          onSearchSubmit={handleSearchSubmit}
+          unitSystem={unitSystem}
+          setUnitSystem={setUnitSystem}
+        />
 
-                  <div className='m-3'>
-                  {" "}
-                  <h2>{time}</h2>
+        {error && <div className="text-center text-red-500 mt-4">{error}</div>}
+
+        <div className="flex flex-col lg:flex-row gap-8 mt-8">
+          <div className="lg:w-1/2">
+            {locationData.temp && !error && <WeatherCard weatherData={locationData} unitSystem={unitSystem} />}
+          </div>
+
+          <div className="lg:w-1/2">
+            {forecast.length > 0 && (
+              <section className="mb-8">
+                <h2 className="text-2xl font-bold mb-4 text-center">5-Day Forecast</h2>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {forecast.map((day, index) => (
+                    <ForecastCard key={index} forecast={day} unitSystem={unitSystem} />
+                  ))}
                 </div>
-              
+              </section>
+            )}
+          </div>
+        </div>
+      </main>
 
-              <div >
-                Feels Like:
-                <br /> <h2> {feelslike}</h2> <h1>&deg;C</h1>{" "}
-              </div>
-            
-              <div>
-                Temperature:
-                <br /> <h2>{temp}</h2> <h1>&deg;C</h1>{" "}
-              </div>
-            
-            <div >
-              <div> {rain+": "+ sky}</div>
-            </div>
-            </div>
-        </>
-      )}
-<div className="footer" >
-&copy; 2023 RAJAN SAPKOTA <br/>
-rajan.sa9841@gmail.com | 
-<a href = "mailto: rajan.sa9841@gmail.com">Send Email</a>
-        </div>
-        </div>
-       
-    </>
-    
+      <footer className="mt-auto">
+        <Footer />
+      </footer>
+    </div>
   );
 }
 
